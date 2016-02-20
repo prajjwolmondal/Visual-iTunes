@@ -1,7 +1,13 @@
 
-if (!window.indexedDB) {
-    window.alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
-};
+document.addEventListener("DOMContentLoaded", function(){
+ 
+    if("indexedDB" in window) {
+        console.log("YES!!! I CAN DO IT!!! WOOT!!!");
+    } else {
+        console.log("I has a sad.");
+    }
+ 
+},false);
 
 var db;
 var request = indexedDB.open("MyTestDatabase");

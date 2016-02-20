@@ -42,7 +42,7 @@
 
 require_once 'iTunesXMLparser.class.php';
 
-$xml_path = 'iTunes Library 2014-05-21';
+$xml_path = 'iTunes.Library.2014-05-21.xml';
 
 $itunes = new iTunesXMLParser();
 $itunes->sort_field = 'Track ID';

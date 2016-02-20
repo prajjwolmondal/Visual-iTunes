@@ -5,7 +5,7 @@
  * and output them in a table, providing a list of tracks for you to re-rip
  */
 require 'iTunesLibrary.php';
-$library = new iTunesLibrary("Library.xml");
+$library = new iTunesLibrary("iTunes.Library.2014-05-21.xml");
 echo '<table><tbody>';
 foreach ($library->getTracks() as $t){
   if ( ($t->Bit_Rate < 256) && ($t->Genre != 'Podcast') ){ 

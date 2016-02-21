@@ -2,6 +2,7 @@ header {
   padding: 0;
   margin: 0;
 }
+
 #myProgress {
   margin: 10px 0 10px 0;
 	width: 100%;
@@ -9,9 +10,14 @@ header {
 	position: relative;
 	background-color: #ddd;
 }
+
 #myBar {
 	background-color: #4CAF50;
 	width: 0px;
 	height: 30px;
 	position: absolute;
+}
+
+.graph {
+  height: 450px;
 }

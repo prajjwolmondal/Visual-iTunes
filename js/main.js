@@ -2,28 +2,6 @@ window.onload = function(){
 
 }
 
-function mode(array)
-{
-    if(array.length == 0)
-    	return null;
-    var modeMap = {};
-    var maxEl = array[0], maxCount = 1;
-    for(var i = 0; i < array.length; i++)
-    {
-    	var el = array[i];
-    	if(modeMap[el] == null)
-    		modeMap[el] = 1;
-    	else
-    		modeMap[el]++;	
-    	if(modeMap[el] > maxCount)
-    	{
-    		maxEl = el;
-    		maxCount = modeMap[el];
-    	}
-    }
-    return maxEl;
-}
-
 function move(w) {
   var elem = document.getElementById("myBar");   
   var width = 0;
@@ -77,10 +55,10 @@ function displayYearGraph(arr){
 
 function displayGenreGraph(arr){
 	document.getElementById("genreGraph").innerHTML = "Your favorite genre";
-	alert(arr);
+	//alert(arr);
 	var len = arr.length;
 	var uniques = arr.unique();
-	alert(uniques);
+	//alert(uniques);
 	var counts = Array.apply(null, Array(uniques.length)).map(Number.prototype.valueOf,0);
 	var index;
 	for (i in arr){
@@ -89,7 +67,7 @@ function displayGenreGraph(arr){
 		// alert(index);
 		counts[index] = counts[index]+1;
 	}
-	alert(counts);
+	//alert(counts);
 	var data = [{
 		x: uniques,
 		y: counts,
@@ -134,7 +112,7 @@ function parse() {
 
 			var bar = 15;
 			move(bar);
-			for (i = 0; i < tracksDictChildren.length && i < 100*4; i+=1) { // starts from 1, every odd number after one (eg 1, 3, 5, 7...)
+			for (i = 0; i < tracksDictChildren.length && i < 10000*4; i+=1) { // starts from 1, every odd number after one (eg 1, 3, 5, 7...)
 				
 				//document.getElementById("someElement").innerHTML += tracksDictChildren[i*2+1].textContent;
 				//document.getElementById("someElement").innerHTML += "<br/>";
@@ -173,7 +151,7 @@ function parse() {
 							var a = trackChildren[j+1].textContent;
 							track["Genre"] = a;
 							// genres.push(a);
-						}				
+						}	
 					}
 
 					trackLibrary.push(track);

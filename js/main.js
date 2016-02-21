@@ -37,10 +37,10 @@ function parse() {
 				//document.getElementById("someElement").innerHTML += tracksDictChildren[i*2+1].textContent;
 				//document.getElementById("someElement").innerHTML += "<br/>";
 				
-				trackChildren = tracksDictChildren[i].childNodes; // attributes of each track
+				trackChildren = tracksDictChildren[i*2+1].childNodes; // attributes of each track
 
 
-				if ((i-1)/2 % 2 == 1) { // every other child (track dicts only)
+				//if ((i-1)/2 % 2 == 1) { // every other child (track dicts only)
 					var track = {};
 
 					for (j = 0; j < trackChildren.length; j++) {
@@ -64,11 +64,19 @@ function parse() {
 						else if (trackChildren[j].textContent == "Play Count") {
 							//alerttrackChildren[j+1].textContent;
 							track["Play Count"] = trackChildren[j+1].textContent;
+						}		
+						else if (trackChildren[j].textContent == "Genre") {
+							//alerttrackChildren[j+1].textContent;
+							track["Genre"] = trackChildren[j+1].textContent;
+						}				
+						else if (trackChildren[j].textContent == "Total Time") {
+							//alerttrackChildren[j+1].textContent;
+							track["Total Time"] = trackChildren[j+1].textContent;
 						}				
 					}
 
 					trackLibrary.push(track);
-				}
+				//}
 
 
 

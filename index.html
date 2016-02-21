@@ -3,18 +3,33 @@
 <head>
   <meta charset="utf-8">
   <title>The McHacks Project</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/normalize.css">
+
+  <!-- JavaScript -->
   <script src="http://code.jquery.com/jquery-2.2.0.js"></script>
   <script src="./js/main.js" type="text/javascript"></script>
 </head>
 <body>
+	<div class="container">
  
-<h1> Hello </h1>
+		<header>
+			<h1> iTunes Library Visualizer </h1>
+			<p></p>
+			<p>In iTunes, go to File->Library->Export to get an iTunes library XML file. Enter it here to visualize your library.</p>
+		</header>
 
-   <input id="fileupload" name="myfile" type="file" />
-   <button onclick="parse();">Submit</button>
 
-<p id="someElement"></p>
-<p id="anotherElement"></p>
+		<input id="fileupload" name="myfile" type="file" />
+		<br/><br/>
+		<button onclick="parse();">Submit</button>
+
+		<p id="someElement"></p>
+		<p id="anotherElement"></p>
+
+	</div>
 
 </body>
 </html>

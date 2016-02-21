@@ -20,4 +20,6 @@ header {
 
 .graph {
   height: 450px;
+  width: 100%;
+  display: none;
 }

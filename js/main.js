@@ -79,11 +79,16 @@ function displayGenreGraph(arr){
 
 function parse() {
 
+	var graphs = document.getElementsByClassName("graph");
+	for (i = 0; i < graphs.length; i++) {
+		graphs[i].style.display = "block";
+	}
+
 	document.getElementById("someElement").innerHTML = ""; // clear
 
 	var file = document.getElementById('fileupload').files[0];
 	if (file) {
-        alert("Name: " + file.name + "\n" + "Last Modified Date :" + file.lastModifiedDate);
+        document.getElementsByClassName("submit")[0].innerHTML += "&nbsp;" + file.name + " has been uploaded.";
 	}
 
 	var fr = new FileReader();
@@ -116,7 +121,7 @@ function parse() {
 				
 				//document.getElementById("someElement").innerHTML += tracksDictChildren[i*2+1].textContent;
 				//document.getElementById("someElement").innerHTML += "<br/>";
-				
+				var doNotAdd = false;
 				trackChildren = tracksDictChildren[i].childNodes; // attributes of each track
 
 
@@ -151,10 +156,15 @@ function parse() {
 							var a = trackChildren[j+1].textContent;
 							track["Genre"] = a;
 							// genres.push(a);
-						}	
+						}
+						else if (trackChildren[j].textContent == "Podcast") { // has a key "Podcast"
+							doNotAdd = true;
+							break;
+						}
 					}
 
-					trackLibrary.push(track);
+					if (!doNotAdd)
+						trackLibrary.push(track);
 				}
 			}
 			var done = true;
@@ -190,5 +200,8 @@ function parse() {
 		}
 		displayYearGraph(years);
 		displayGenreGraph(genres);
+
+		document.getElementById("myProgress").style.display = "block";
+		document.getElementById("myBar").style.display = "block";
 	};
 }

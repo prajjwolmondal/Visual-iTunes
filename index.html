@@ -2,27 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>The McHacks Project</title>
+  <title>iTunes Library Visualizer</title>
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/skeleton.css">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
 
+
   <!-- JavaScript -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="http://code.jquery.com/jquery-2.2.0.js"></script>
   <script src="./js/main.js" type="text/javascript"></script>
 </head>
 <body>
   <div class="container">
  
-		<h1> iTunes Library Visualizer </h1>
+		<h1>iTunes Library Visualizer</h1>
 		<div class="row">
 			<div class="left-info-sec eight columns">
-				<p>This is a simple app used to learn more about your iTunes library beyond what iTunes is normally capable of. Statistics and visualizations of your iTunes library is displayed.</p>
-				<p><strong>To use:</strong> in iTunes, go to File->Library->Export to get an iTunes library XML file. Enter it here to visualize your library.</p>
-				<p>View this on <a href="https://github.com/theposter/libraryStats">Github</a>.</p>
+				<p>This is a simple app used to learn more about your iTunes library beyond what iTunes is normally capable of. It displays statistics and visualizations about your iTunes library using your iTunes library XML file.</p>
+				<p><strong>To use:</strong> In iTunes, go to File->Library->Export to get an iTunes library XML file. Enter it here to visualize your library.</p>
+				<p>No information about your library is stored, all data is local to your browser. All calculations are made on your browser.</p>
+				<p>Built at <a href="http://mchacks.io">McHacks 2016</a>. View this on <a href="https://github.com/theposter/libraryStats">Github</a>.</p>
 			</div>
 			<div class="right-info-sec four columns">&nbsp;</div>
 		</div>
@@ -31,7 +32,9 @@
 
 			<input id="fileupload" name="myfile" type="file" />
 			<br/><br/>
-			<button onclick="parse(); move(5);">Submit</button>
+			<div class="submit">
+				<button onclick="parse(); move(5);">Submit</button>
+			</div>
 
 			<br/>
 			<div id="myProgress">

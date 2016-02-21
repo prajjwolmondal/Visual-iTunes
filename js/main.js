@@ -1,28 +1,38 @@
 window.onload = function(){
 
-	if (window.DOMParser) {
+}
 
-		parser = new DOMParser();
+function parse() {
 
-		var dataString;
+	document.getElementById("someElement").innerHTML = ""; // clear
 
-		jQuery.get('iTunes Library 2014-05-21.xml', function(data) {
+	var file = document.getElementById('fileupload').files[0];
+	if (file) {
+        alert("Name: " + file.name + "\n" + "Last Modified Date :" + file.lastModifiedDate);
+	}
 
-			dataString = new XMLSerializer().serializeToString(data); // XMLDocument to string
+	var fr = new FileReader();
+
+	fr.readAsText(file);
+
+	fr.onload = function(e) {
+    // e.target.result contains text of file
+		var fileText = e.target.result;
+
+		if (window.DOMParser) {
+
+			parser = new DOMParser();
 
 			// If the three lines below are outside the if loop, code stops working unless there is an alert(dataString) before this line, and outside this function
-			xmlDoc = parser.parseFromString(dataString,"text/xml"); // parse
-
-			//document.getElementById("someElement").innerHTML = dataString;
+			xmlDoc = parser.parseFromString(fileText,"text/xml"); // parse
 
 			var tracksDict = xmlDoc.getElementsByTagName("dict")[1]; // dict associated with key "Tracks"
-			//document.getElementById("someElement").innerHTML = tracksDict;
 
 			var tracksDictChildren = tracksDict.childNodes;
 
 			var trackLibrary = [];
 
-			for (i = 1; i < 100*4+1 ; i+=2) { // starts from 1, every odd number after one (eg 1, 3, 5, 7...)
+			for (i = 0; i < tracksDictChildren.length && i < 100*4; i+=1) { // starts from 1, every odd number after one (eg 1, 3, 5, 7...)
 				
 				//document.getElementById("someElement").innerHTML += tracksDictChildren[i*2+1].textContent;
 				//document.getElementById("someElement").innerHTML += "<br/>";
@@ -77,8 +87,6 @@ window.onload = function(){
 
 				document.getElementById("someElement").innerHTML += "<br/>";
 			}
-	
-		});
-
-	}
+		}
+	};
 }

@@ -77,6 +77,37 @@ function displayGenreGraph(arr){
 	Plotly.newPlot('displayGenreGraph', data);
 }
 
+function displayArtistGraph(arr, songsTotal){
+	document.getElementById("artistGraph").innerHTML = "Your favorite artists";
+	// alert(arr);
+	// alert(songsTotal);
+	var len = arr.length;
+	var uniques = arr.unique();
+	//alert(uniques);
+	var counts = Array.apply(null, Array(uniques.length)).map(Number.prototype.valueOf,0);
+	var index;
+	var percents = [];
+	for (i in arr){
+		//alert(arr[i]);
+		index = uniques.indexOf(arr[i]);
+		//alert(index);
+		counts[index] = counts[index]+1;
+		percents[index] = (counts[index]/songsTotal)*100;
+	}
+	var data = [{
+		values: percents,
+		labels: uniques,
+		type: 'pie'
+	}];
+
+	var layout = {
+		height: 600,
+		width: 800
+	};
+
+	Plotly.newPlot('displayArtistGraph', data, layout);
+}
+
 function parse() {
 
 	document.getElementById("someElement").innerHTML = ""; // clear
@@ -92,6 +123,8 @@ function parse() {
 
 	var years = [];
 	var genres = [];
+	var artists = [];
+	var totalSongs = 0;
 
 	fr.onload = function(e) {
     // e.target.result contains text of file
@@ -118,7 +151,7 @@ function parse() {
 				//document.getElementById("someElement").innerHTML += "<br/>";
 				
 				trackChildren = tracksDictChildren[i].childNodes; // attributes of each track
-
+				totalSongs = totalSongs+1;
 
 				if ((i-1)/2 % 2 == 1) { // every other child (track dicts only)
 					var track = {};
@@ -183,12 +216,16 @@ function parse() {
 				    if (key = "Genre"){
 				    	genres.push(curTrack[key]);
 				    }
+				    if (key = "Artist"){
+				    	artists.push(curTrack[key]);
+				    }
 				}
 
 				// document.getElementById("someElement").innerHTML += "<br/>";
 			}
 		}
-		displayYearGraph(years);
-		displayGenreGraph(genres);
+		// displayYearGraph(years);
+		// displayGenreGraph(genres);
+		displayArtistGraph(artists, totalSongs);
 	};
 }

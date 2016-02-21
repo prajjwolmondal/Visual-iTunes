@@ -1,5 +1,20 @@
+
 window.onload = function(){
 
+}
+
+function move(w) {
+  var elem = document.getElementById("myBar");   
+  var width = 0;
+  var id = setInterval(frame, 10);
+  function frame() {
+    if (width == w) {
+      clearInterval(id);
+    } else {
+      width++; 
+      elem.style.width = width + '%'; 
+    }
+  }
 }
 
 function parse() {
@@ -32,15 +47,17 @@ function parse() {
 
 			var trackLibrary = [];
 
+			var bar = 15;
+			move(bar);
 			for (i = 0; i < tracksDictChildren.length && i < 100*4; i+=1) { // starts from 1, every odd number after one (eg 1, 3, 5, 7...)
 				
 				//document.getElementById("someElement").innerHTML += tracksDictChildren[i*2+1].textContent;
 				//document.getElementById("someElement").innerHTML += "<br/>";
 				
-				trackChildren = tracksDictChildren[i*2+1].childNodes; // attributes of each track
+				trackChildren = tracksDictChildren[i].childNodes; // attributes of each track
 
 
-				//if ((i-1)/2 % 2 == 1) { // every other child (track dicts only)
+				if ((i-1)/2 % 2 == 1) { // every other child (track dicts only)
 					var track = {};
 
 					for (j = 0; j < trackChildren.length; j++) {
@@ -64,7 +81,7 @@ function parse() {
 						else if (trackChildren[j].textContent == "Play Count") {
 							//alerttrackChildren[j+1].textContent;
 							track["Play Count"] = trackChildren[j+1].textContent;
-						}		
+						}				
 						else if (trackChildren[j].textContent == "Genre") {
 							//alerttrackChildren[j+1].textContent;
 							track["Genre"] = trackChildren[j+1].textContent;
@@ -76,12 +93,19 @@ function parse() {
 					}
 
 					trackLibrary.push(track);
-				//}
-
-
-
+				}
 			}
-	
+			var done = true;
+			while (done){
+				if ((bar+10) < 100){
+						bar = bar + 10;
+						move(bar);
+					}
+					else{
+						move(100);
+						done = false;
+					}
+			}
 			// print all elements
 			for(i = 1; i < trackLibrary.length; i+=1) {
 
@@ -91,6 +115,7 @@ function parse() {
 
 				for(var key in curTrack) {
 				    document.getElementById("someElement").innerHTML += key + ": " + curTrack[key] + "<br/>";
+				    
 				}
 
 				document.getElementById("someElement").innerHTML += "<br/>";

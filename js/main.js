@@ -88,7 +88,7 @@ function parse() {
 
 	var file = document.getElementById('fileupload').files[0];
 	if (file) {
-        document.getElementsByClassName("submit")[0].innerHTML += "&nbsp;" + file.name + " has been uploaded.";
+        document.getElementsByClassName("submit-result")[0].innerHTML = "&nbsp;" + file.name + " has been submitted.";
 	}
 
 	var fr = new FileReader();
@@ -158,8 +158,10 @@ function parse() {
 							// genres.push(a);
 						}
 						else if (trackChildren[j].textContent == "Podcast") { // has a key "Podcast"
-							doNotAdd = true;
-							break;
+							if (!document.getElementById("includePodcasts").checked) { // include podcasts checkbox is checked
+								doNotAdd = true;
+								break;
+							}
 						}
 					}
 

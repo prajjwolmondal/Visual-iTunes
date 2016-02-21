@@ -22,7 +22,7 @@
 			<div class="left-info-sec eight columns">
 				<p>This is a simple app used to learn more about your iTunes library beyond what iTunes is normally capable of. It displays statistics and visualizations about your iTunes library using your iTunes library XML file.</p>
 				<p><strong>To use:</strong> In iTunes, go to File->Library->Export to get an iTunes library XML file. Enter it here to visualize your library.</p>
-				<p>No information about your library is stored, all data is local to your browser. All calculations are made on your browser.</p>
+				<p>No information about your library is stored; all data and calculations are local to your browser.</p>
 				<p>Built at <a href="http://mchacks.io">McHacks 2016</a>. View this on <a href="https://github.com/theposter/libraryStats">Github</a>.</p>
 			</div>
 			<div class="right-info-sec four columns">&nbsp;</div>
@@ -30,10 +30,17 @@
 
 		<div class="main twelve columns">
 
-			<input id="fileupload" name="myfile" type="file" />
+			<input id="includePodcasts" type="checkbox"/> Include podcasts
+
 			<br/><br/>
+
+			<input id="fileupload" name="myfile" type="file" />
+
+			<br/><br/>
+			
 			<div class="submit">
 				<button onclick="parse(); move(5);">Submit</button>
+				<div class="submit-result"></div>
 			</div>
 
 			<br/>

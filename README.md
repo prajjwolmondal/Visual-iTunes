@@ -1,4 +1,4 @@
-# libraryStats
+# Visual iTunes
 Display statistics and visualizations about your iTunes library using your iTunes library XML file.
 
 **To use:** In iTunes, go to File->Library->Export to get an iTunes library XML file.

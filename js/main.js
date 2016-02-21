@@ -77,6 +77,60 @@ function displayGenreGraph(arr){
 	Plotly.newPlot('displayGenreGraph', data);
 }
 
+function displayArtistGraph(arr, songsTotal){
+	document.getElementById("artistGraph").innerHTML = "Your favorite artists";
+	// alert(arr);
+	// alert(songsTotal);
+	var len = arr.length;
+	var uniques = arr.unique();
+	//alert(uniques);
+	var counts = Array.apply(null, Array(uniques.length)).map(Number.prototype.valueOf,0);
+	var index;
+	var percents = [];
+	for (i in arr){
+		//alert(arr[i]);
+		index = uniques.indexOf(arr[i]);
+		//alert(index);
+		counts[index] = counts[index]+1;
+		percents[index] = (counts[index]/songsTotal)*100;
+	}
+	var data = [{
+		values: percents,
+		labels: uniques,
+		type: 'pie'
+	}];
+
+	var layout = {
+		height: 600,
+		width: 800
+	};
+
+	Plotly.newPlot('displayArtistGraph', data, layout);
+}
+
+function findMax(playCount){
+	var max = 0;
+	for (i=0;i<playCount.length;i++){
+		if (playCount[i] > max){
+			max = playCount[i];
+		}
+	}
+	return max;
+}
+
+function displayTopSong(playCount,nameOfSongs, artistName){
+	var len = playCount.length;
+	var max = findMax(playCount);
+	// alert(playCount);
+	// alert(nameOfSongs);
+	// alert(max);
+	var index = playCount.indexOf(max);
+	var topSong = nameOfSongs[index];
+	var topSongArtist = artistName[index];
+	document.getElementById("topSong").innerHTML = "Your favorite song is "+topSong.toString()+". By: "+topSongArtist.toString()+". You have played it "+max.toString()+" number of times!";
+	// alert(topSong);
+}
+
 function parse() {
 
 	var graphs = document.getElementsByClassName("graph");
@@ -97,6 +151,10 @@ function parse() {
 
 	var years = [];
 	var genres = [];
+	var artists = [];
+	var totalSongs = 0;
+	var playCounts = [];
+	var names = [];
 
 	fr.onload = function(e) {
     // e.target.result contains text of file
@@ -123,7 +181,7 @@ function parse() {
 				//document.getElementById("someElement").innerHTML += "<br/>";
 				var doNotAdd = false;
 				trackChildren = tracksDictChildren[i].childNodes; // attributes of each track
-
+				totalSongs = totalSongs+1;
 
 				if ((i-1)/2 % 2 == 1) { // every other child (track dicts only)
 					var track = {};
@@ -195,6 +253,15 @@ function parse() {
 				    if (key = "Genre"){
 				    	genres.push(curTrack[key]);
 				    }
+				    if (key = "Artist"){
+				    	artists.push(curTrack[key]);
+				    }
+				    if (key = "Play Count"){
+				    	playCounts.push(curTrack[key]);
+				    }
+				    if (key = "Name"){
+				    	names.push(curTrack[key]);
+				    }
 				}
 
 				// document.getElementById("someElement").innerHTML += "<br/>";
@@ -202,7 +269,10 @@ function parse() {
 		}
 		displayYearGraph(years);
 		displayGenreGraph(genres);
+		displayArtistGraph(artists, totalSongs);
+		displayTopSong(playCounts,names,artists);
 
+		// show loading bar
 		document.getElementById("myProgress").style.display = "block";
 		document.getElementById("myBar").style.display = "block";
 	};

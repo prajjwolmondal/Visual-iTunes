@@ -13,83 +13,116 @@
 <p id="anotherElement"></p>
  
 <script>
-if (window.DOMParser) {
-	parser = new DOMParser();
-	var dataString;
+var db;
+var transaction;
+var store;
 
-	if (!window.indexedDB) {
-            window.alert("Your browser doesn't support a stable version of IndexedDB.")
-         }
-
-    var db;
-    var request = indexedDB.open("database",1);
+function indexedDBOk() {
+    return "indexedDB" in window;
+}
 
 
-	jQuery.get('iTunes Library 2014-05-21.xml', function(data) {
-		dataString = new XMLSerializer().serializeToString(data); // XMLDocument to string
-		// If the three lines below are outside the if loop, code stops working unless there is an alert(dataString) before this line, and outside this function
-		xmlDoc = parser.parseFromString(dataString,"text/xml"); // parse
-		//document.getElementById("someElement").innerHTML = dataString;
-		var tracksDict = xmlDoc.getElementsByTagName("dict")[1]; // dict associated with key "Tracks"
-		//document.getElementById("someElement").innerHTML = tracksDict;
-		var tracksDictChildren = tracksDict.childNodes;
-		var trackLibrary = [];
-		for (i = 0; i < 10; i++) { // starts from 1, every odd number after one (eg 1, 3, 5, 7...)
-			
-			trackChildren = tracksDictChildren[i*2+1].childNodes; // attributes of each track
-			var track = {};
-			for (j = 0; j < trackChildren.length; j++) {
-				if (trackChildren[j].textContent == "Artist") {
-					//alerttrackChildren[j+1].textContent;
-					track["Artist"] = trackChildren[j+1].textContent;
+document.addEventListener("DOMContentLoaded", function() {
+	
+	if(!indexedDBOk) return;
+	
+	var openRequest = indexedDB.open("database",1);
+	
+	openRequest.onupgradeneeded = function(e){
+		console.log("Running onupgradeneeded");
+	    var thisDB = e.target.result;
+	    if(!thisDB.objectStoreNames.contains("tracks")) {
+            thisDB.createObjectStore("tracks");
+        }
+	}
+
+	openRequest.onsuccess = function(e){
+	    db = e.target.result;
+	    console.log("success: "+ db);
+	    //Listen for add clicks
+        document.querySelector("#addButton").addEventListener("click", doRest, false);
+	}
+
+	openRequest.onerror = function(e){
+		console.log("error!");
+		console.dir(e);
+	}
+
+},false);
+
+function doRest(e){
+	if (window.DOMParser) {		
+			parser = new DOMParser();
+			var dataString;
+			// Transactions take two arguments. The first is an array of tables you'll 	be working with. The second argument is the type of transaction (readonly and readwrite).
+			alert(db);
+			transaction = db.transaction(["tracks"],"readwrite");
+			store = transaction.objectStore("tracks");
+			var tracks = {};
+
+			jQuery.get('iTunes Library 2014-05-21.xml', function(data) {
+				dataString = new XMLSerializer().serializeToString(data); // XMLDocument to string
+				// If the three lines below are outside the if loop, code stops working unless there is an alert(dataString) before this line, and outside this function
+				xmlDoc = parser.parseFromString(dataString,"text/xml"); // parse
+				//document.getElementById("someElement").innerHTML = dataString;
+				var tracksDict = xmlDoc.getElementsByTagName("dict")[1]; // dict associated with key "Tracks"
+				//document.getElementById("someElement").innerHTML = tracksDict;
+				var tracksDictChildren = tracksDict.childNodes;
+				var trackLibrary = [];
+				for (i = 0; i < 10; i++) { // starts from 1, every odd number after one (eg 1, 3, 5, 7...)
+					
+					trackChildren = tracksDictChildren[i*2+1].childNodes; // attributes of each track
+					var track = {};
+					for (j = 0; j < trackChildren.length; j++) {
+						if (trackChildren[j].textContent == "Artist") {
+							//alerttrackChildren[j+1].textContent;
+							track["Artist"] = trackChildren[j+1].textContent;
+						}
+						else if (trackChildren[j].textContent == "Album") {
+							//alerttrackChildren[j+1].textContent;
+							track["Album"] = trackChildren[j+1].textContent;
+						}
+						else if (trackChildren[j].textContent == "Name") {
+							//alerttrackChildren[j+1].textContent;
+							track["Name"] = trackChildren[j+1].textContent;
+						}
+						else if (trackChildren[j].textContent == "Year") {
+							//alerttrackChildren[j+1].textContent;
+							track["Year"] = trackChildren[j+1].textContent;
+						}
+						else if (trackChildren[j].textContent == "Play Count") {
+							//alerttrackChildren[j+1].textContent;
+							track["Play Count"] = trackChildren[j+1].textContent;
+						}
+					}
+					trackLibrary.push(track);
 				}
-				else if (trackChildren[j].textContent == "Album") {
-					//alerttrackChildren[j+1].textContent;
-					track["Album"] = trackChildren[j+1].textContent;
+				for(i = 0; i < trackLibrary.length; i++) {
+				    var curTrack = trackLibrary[i];
+					for(var key in curTrack) {
+						tracks[key] = curTrack[key];
+					    document.getElementById("someElement").innerHTML += key + ": " + curTrack[key] + "<br/>";
+					}
+					// Performing the add
+					var request = store.add(tracks,1);
+
+					document.getElementById("someElement").innerHTML += "<br/>";
+
+					// Error handling
+					request.onerror = function(e){
+						alert("Error!!",e.target.error.name);
+					}
+
+					// Success handling
+					request.onsuccess = function(e){
+						console.log("It worked!");
+					}
+
 				}
-				else if (trackChildren[j].textContent == "Name") {
-					//alerttrackChildren[j+1].textContent;
-					track["Name"] = trackChildren[j+1].textContent;
-				}
-				else if (trackChildren[j].textContent == "Year") {
-					//alerttrackChildren[j+1].textContent;
-					track["Year"] = trackChildren[j+1].textContent;
-				}
-				else if (trackChildren[j].textContent == "Play Count") {
-					//alerttrackChildren[j+1].textContent;
-					track["Play Count"] = trackChildren[j+1].textContent;
-				}
-			}
-			//document.getElementById("h1title").innerHTML += track["Name"];
-			trackLibrary.push(track);
-		}
-		for(i = 0; i < trackLibrary.length; i++) {
-		    var curTrack = trackLibrary[i];
-			for(var key in curTrack) {
-			    document.getElementById("someElement").innerHTML += key + ": " + curTrack[key] + "<br/>";
-			}
-			document.getElementById("someElement").innerHTML += "<br/>";
-		}
-	});
-	function readAll() {
-		var transaction = db.transaction(["database"],"readonly");
-    	var objectStore = transaction.objectStore("employee");
-            
-        objectStore.openCursor().onsuccess = function(event) {
-            var cursor = event.target.result;
-               
-            if (cursor) {
-                  alert("Name for id " + cursor.key + " is " + cursor.value.name + ", Age: " + cursor.value.age + ", Email: " + cursor.value.email);
-                  cursor.continue();
-               }
-               
-               else {
-                  alert("No more entries!");
-               }
-            };
-    }
+			});
+	}
 }
 </script>
- 
+<button id="addButton">Add Data</button>
 </body>
 </html>

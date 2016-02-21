@@ -13,39 +13,23 @@
 <p id="anotherElement"></p>
  
 <script>
-
-
-
 if (window.DOMParser) {
 	parser = new DOMParser();
-
 	var dataString;
-
 	jQuery.get('iTunes Library 2014-05-21.xml', function(data) {
-
 		dataString = new XMLSerializer().serializeToString(data); // XMLDocument to string
-
 		// If the three lines below are outside the if loop, code stops working unless there is an alert(dataString) before this line, and outside this function
 		xmlDoc = parser.parseFromString(dataString,"text/xml"); // parse
-
 		//document.getElementById("someElement").innerHTML = dataString;
-
 		var tracksDict = xmlDoc.getElementsByTagName("dict")[1]; // dict associated with key "Tracks"
 		//document.getElementById("someElement").innerHTML = tracksDict;
-
 		var tracksDictChildren = tracksDict.childNodes;
 		var trackLibrary = [];
-
 		for (i = 0; i < 10; i++) { // starts from 1, every odd number after one (eg 1, 3, 5, 7...)
-			
-			//document.getElementById("someElement").innerHTML += tracksDictChildren[i*2+1].textContent;
-			//document.getElementById("someElement").innerHTML += "<br/>";
 			
 			trackChildren = tracksDictChildren[i*2+1].childNodes; // attributes of each track
 			var track = {};
-
 			for (j = 0; j < trackChildren.length; j++) {
-
 				if (trackChildren[j].textContent == "Artist") {
 					//alerttrackChildren[j+1].textContent;
 					track["Artist"] = trackChildren[j+1].textContent;
@@ -66,124 +50,19 @@ if (window.DOMParser) {
 					//alerttrackChildren[j+1].textContent;
 					track["Play Count"] = trackChildren[j+1].textContent;
 				}
-
-
 				
 			}
-
 			trackLibrary.push(track);
-
-
-			//document.getElementById("someElement").innerHTML += Object.keys(track);
-
 		}
-
-		// document.getElementById("someElement").innerHTML += trackLibrary;
-
-
-
-
 		for(i = 0; i < trackLibrary.length; i++) {
-
 		    var curTrack = trackLibrary[i];
-
 			for(var key in curTrack) {
 			    document.getElementById("someElement").innerHTML += key + ": " + curTrack[key] + "<br/>";
 			}
 			document.getElementById("someElement").innerHTML += "<br/>";
 		}
-
-
-
-		//for (i = 0; i < tracksDictChildren.length; i++) {
-		//	document.getElementById("someElement").innerHTML = i;
-		//}
-
-
-
-
-
-
-
-		//var value = xmlDoc.getElementsByTagName("key")[0].textContent;
-		//document.getElementById("someElement").innerHTML += value;
-
-
-
-		//var dict1 = xmlDoc.getElementsByTagName("dict")[0].childNodes;//[0].nodeValue;
-		//var value = dict1[0].nodeValue;
-
-
-		//document.getElementById("someElement").innerHTML = value;
-
-
-
 	});
-
 }
-
-
-
-// Load the xml file using ajax 
-$.ajax({
-    type: "GET",
-    url: "./something.xml",
-    dataType: "xml",
-    success: function (xml) {
-
-       	//alert();
-
-        // Parse the xml file and get data
-        var xmlDoc = $.parseXML(xml),
-        	$xml = $(xmlDoc);
-
-
-        //$xml.find('contentprogramming').each(function () {
-        //	alert();
-            //$("#someElement").append("s");
-        //});
-
-
-
- 
-        //$xml.find('dict').each(function() {
-
-        //	alert();
-			
-         //	var $dict = $(this);
-
-/*
-
-        	$key = $dict.find('key').each(function () {
-            	alert($key);
-
-            });
-
-
-*/
-       	//});
-
-
-    }
-});
-
-/*
-var xml = "iTunes Library 2014-05-21.xml",
-  xmlDoc = $.parseXML( xml ),
-  $xml = $( xmlDoc ),
-  $title = $xml.find( "title" );
-  */
- 
-
-
-// Append "RSS Title" to #someElement
-$( "#someElement" ).append( $title.text() );
- 
-// Change the title to "XML Title"
-$title.text( "XML Title" );
- 
-// Append "XML Title" to #anotherElement
-$( "#anotherElement" ).append( $title.text() );
 </script>
  
 </body>

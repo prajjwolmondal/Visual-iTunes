@@ -16,50 +16,41 @@
 var db;
 var transaction;
 var store;
-
 function indexedDBOk() {
     return "indexedDB" in window;
 }
-
-
 document.addEventListener("DOMContentLoaded", function() {
 	
 	if(!indexedDBOk) return;
 	
-	var openRequest = indexedDB.open("database",1);
+	var openRequest = indexedDB.open("database",3);
 	
 	openRequest.onupgradeneeded = function(e){
 		console.log("Running onupgradeneeded");
+		var objectStore = db.createObjectStore("tracks", { keyPath: "Name" });
 	    var thisDB = e.target.result;
+	    objectStore.createIndex("Name","Name", {unique: true});
+		objectStore.createIndex("Artist","Artist",{unique: false});
 	    if(!thisDB.objectStoreNames.contains("tracks")) {
             thisDB.createObjectStore("tracks");
         }
 	}
-
 	openRequest.onsuccess = function(e){
 	    db = e.target.result;
 	    console.log("success: "+ db);
 	    //Listen for add clicks
         document.querySelector("#addButton").addEventListener("click", doRest, false);
 	}
-
 	openRequest.onerror = function(e){
 		console.log("error!");
 		console.dir(e);
 	}
-
 },false);
-
 function doRest(e){
 	if (window.DOMParser) {		
 			parser = new DOMParser();
 			var dataString;
-			// Transactions take two arguments. The first is an array of tables you'll 	be working with. The second argument is the type of transaction (readonly and readwrite).
-			alert(db);
-			transaction = db.transaction(["tracks"],"readwrite");
-			store = transaction.objectStore("tracks");
 			var tracks = {};
-
 			jQuery.get('iTunes Library 2014-05-21.xml', function(data) {
 				dataString = new XMLSerializer().serializeToString(data); // XMLDocument to string
 				// If the three lines below are outside the if loop, code stops working unless there is an alert(dataString) before this line, and outside this function
@@ -97,6 +88,20 @@ function doRest(e){
 					}
 					trackLibrary.push(track);
 				}
+			// Transactions take two arguments. The first is an array of tables you'll 	be working with. The second argument is the type of transaction (readonly and readwrite).
+			//alert(db);
+
+			var objStore = db.createObjectStore("Name",{autoIncrement: true});
+			transaction = db.transaction(["tracks"],"readwrite");
+
+			transaction.onerror = function(event){
+				alert("Error with transaction");
+			}
+			transaction.onsuccess = function(event){
+				alert("Succesfully transactioned");
+			}
+
+			store = transaction.objectStore("tracks");
 				for(i = 0; i < trackLibrary.length; i++) {
 				    var curTrack = trackLibrary[i];
 					for(var key in curTrack) {
@@ -104,20 +109,20 @@ function doRest(e){
 					    document.getElementById("someElement").innerHTML += key + ": " + curTrack[key] + "<br/>";
 					}
 					// Performing the add
-					var request = store.add(tracks,1);
+					var request = store.add(tracks.name);
+					request.onsuccess = function(event){
+						alert("Added");
+					}
 
 					document.getElementById("someElement").innerHTML += "<br/>";
-
 					// Error handling
 					request.onerror = function(e){
 						alert("Error!!",e.target.error.name);
 					}
-
 					// Success handling
 					request.onsuccess = function(e){
 						console.log("It worked!");
 					}
-
 				}
 			});
 	}

@@ -49,7 +49,15 @@ function parse() {
 
 			var bar = 15;
 			move(bar);
-			for (i = 0; i < tracksDictChildren.length && i < 100*4; i+=1) { // starts from 1, every odd number after one (eg 1, 3, 5, 7...)
+			var done = true;
+
+			var limit = 100*4;
+			if (tracksDictChildren.length < limit)
+				limit = tracksDictChildren.length;
+			else
+				limit = limit;
+
+			for (i = 0; i < tracksDictChildren.length && i < limit; i+=1) { // starts from 1, every odd number after one (eg 1, 3, 5, 7...)
 				
 				//document.getElementById("someElement").innerHTML += tracksDictChildren[i*2+1].textContent;
 				//document.getElementById("someElement").innerHTML += "<br/>";
@@ -88,23 +96,29 @@ function parse() {
 						}				
 						else if (trackChildren[j].textContent == "Total Time") {
 							//alerttrackChildren[j+1].textContent;
-							track["Total Time"] = trackChildren[j+1].textContent;
+							track["Total Time"] = parseInt((trackChildren[j+1].textContent)/1000/60); //minutes
+
+							//seconds
+							var seconds = parseInt((trackChildren[j+1].textContent)/1000%60); //seconds
+							if (seconds < 10) // pad seconds
+								seconds = '0' + seconds;
+							track["Total Time"] += ":" + seconds;
 						}				
 					}
 
 					trackLibrary.push(track);
 				}
-			}
+					}
 			var done = true;
 			while (done){
 				if ((bar+10) < 100){
-						bar = bar + 10;
-						move(bar);
-					}
-					else{
+					bar = bar + 10;
+					move(bar);
+				}
+				else{
 						move(100);
-						done = false;
-					}
+					done = false;
+				}
 			}
 			// print all elements
 			for(i = 1; i < trackLibrary.length; i+=1) {

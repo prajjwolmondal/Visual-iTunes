@@ -78,7 +78,7 @@ function displayGenreGraph(arr){
 }
 
 function displayArtistGraph(arr, songsTotal){
-	document.getElementById("artistGraph").innerHTML = "Your favorite artists";
+	document.getElementById("artistGraph").innerHTML = "Most songs by artists";
 	// alert(arr);
 	// alert(songsTotal);
 	var len = arr.length;
@@ -101,8 +101,6 @@ function displayArtistGraph(arr, songsTotal){
 	}];
 
 	var layout = {
-		height: 600,
-		width: 800
 	};
 
 	Plotly.newPlot('displayArtistGraph', data, layout);
@@ -129,6 +127,20 @@ function displayTopSong(playCount,nameOfSongs, artistName){
 	var topSongArtist = artistName[index];
 	document.getElementById("topSong").innerHTML = "Your favorite song is "+topSong.toString()+". By: "+topSongArtist.toString()+". You have played it "+max.toString()+" number of times!";
 	// alert(topSong);
+}
+
+function checkFile() {
+
+	var file = document.getElementById('fileupload').files[0];
+	if (file.name.split('.').pop() != "xml") {
+		alert("Please submit an iTunes library XML file.");
+		document.getElementById("submit-button").disabled = true;
+	}
+	else {
+
+		document.getElementById("submit-button").disabled = false;
+	}
+
 }
 
 function parse() {

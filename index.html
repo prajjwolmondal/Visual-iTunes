@@ -31,22 +31,18 @@
 
 		<div class="main twelve columns">
 
-			<input id="includePodcasts" type="checkbox"/> Include podcasts
-
-			<br/><br/>
-
 			<div class="row">
 				<div class="five columns">
 					<label class="library-radio" for="custom-lib">
 						<input type="radio" id="custom-lib" name="library" checked onclick="document.getElementById('fileupload').style.display = 'block';"/> <strong>Use a custom library file from your computer</strong>
 						<br>
 
-						<p class="descrip"><strong>To find your library file:</strong> In iTunes, go to File->Library->Export to get your iTunes library XML file. Enter it below to visualize your library.</p>
+						<p class="descrip">To find your library file: In iTunes, go to File->Library->Export to get your iTunes library XML file. Enter it below to visualize your library.</p>
 					</label>
 				</div>
 				<div class="five columns">
 					<label class="library-radio" for="sample-lib">
-						<input type="radio" id="sample-lib" name="library" onclick="document.getElementById('fileupload').style.display = 'none';"/> Use sample library
+						<input type="radio" id="sample-lib" name="library" onclick="document.getElementById('fileupload').style.display = 'none';"/> <strong>Use sample library</strong>
 						<br>
 						<p class="descrip">A library file provided by us is retrieved from the server.</p>
 					</label>
@@ -56,6 +52,12 @@
 			<input class="custom-library" id="fileupload" name="myfile" type="file" accept="xml" onchange="checkFile();" />
 
 			<br>
+			
+			<label for="includePodcasts">
+				<input id="includePodcasts" type="checkbox"/> Include podcasts
+			</label>
+
+			<br><br>
 			
 			<div class="custom-library submit">
 				<button id="submit-button" onclick="getFile();">Submit</button>

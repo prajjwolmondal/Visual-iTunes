@@ -1,5 +1,11 @@
 window.onload = function(){
-
+	// custom library, show upload input
+	if (document.getElementById('custom-lib').checked == true) {
+		document.getElementById('fileupload').style.display = 'block';
+	}
+	else if (document.getElementById('sample-lib').checked == true) {
+		document.getElementById('fileupload').style.display = 'none';
+	}
 }
 
 function move(w) {
@@ -143,7 +149,40 @@ function checkFile() {
 
 }
 
-function parse() {
+// send a request for the sample library file from the server using AJAX
+// get response (httpRequest.response) using a callback function
+function getSampleLibraryFile(callback) {
+	var httpRequest = new XMLHttpRequest();
+
+	if (!httpRequest) {
+		alert('Cannot create request to server. Please try again later.');
+		return false;
+	}
+
+	var resultLibraryText;
+
+	httpRequest.onreadystatechange = function() {
+		if (httpRequest.readyState === XMLHttpRequest.DONE) {
+			if (httpRequest.status === 200) {
+        		document.getElementsByClassName("submit-result")[0].innerHTML = "&nbsp;Sample library file retrieved.";
+        		callback(httpRequest.response);
+			}
+			else {
+				document.getElementsByClassName("submit-result")[0].style.color = 'red';
+        		document.getElementsByClassName("submit-result")[0].innerHTML = "&nbsp;Error: Sample library file could not be retrieved. Please try again later.";
+			}
+		}
+	};
+	httpRequest.responseType = "blob";
+	httpRequest.open('GET', './iTunes Library 2014-05-21.xml', true);
+	httpRequest.send();
+}
+
+// get the file and then parse the file
+// either get the file from input or
+// get the file from an AJAX request
+// or don't get any file
+function getFile() {
 
 	var graphs = document.getElementsByClassName("graph");
 	for (i = 0; i < graphs.length; i++) {
@@ -151,12 +190,35 @@ function parse() {
 	}
 
 	document.getElementById("someElement").innerHTML = ""; // clear
+	document.getElementsByClassName("submit-result")[0].style.color = 'black';
 
-	var file = document.getElementById('fileupload').files[0];
-	if (file) {
+	// file exists in input and custom library radio is checked
+	if (document.getElementById('fileupload').files[0] != null && document.getElementById('custom-lib').checked == true) {
+		var file = document.getElementById('fileupload').files[0];
+
         document.getElementsByClassName("submit-result")[0].innerHTML = "&nbsp;" + file.name + " has been submitted.";
-	}
 
+        parse(file);
+	}
+	else if (document.getElementById('sample-lib').checked == true) { // sample library radio is checked
+
+		// get the sample library file from the server
+		// parse the response in a callback function when file has been retrieved
+		var file = getSampleLibraryFile(function(response) {
+			parse(response);
+		});
+	}
+	else { // no file submitted
+
+		document.getElementsByClassName("submit-result")[0].style.color = 'red';
+        document.getElementsByClassName("submit-result")[0].innerHTML = "&nbsp;Error: No file selected.";
+
+        return false;
+	}
+}
+
+// read the file into FileReader and parse it
+function parse(file) {
 	var fr = new FileReader();
 
 	fr.readAsText(file);

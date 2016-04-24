@@ -9,6 +9,18 @@ header {
   font-size: 13pt;
 }
 
+label.library-radio {
+  font-weight: normal;
+}
+
+p.descrip {
+  color: grey;
+}
+
+input#fileupload {
+  display: block;
+}
+
 #myProgress {
   margin: 10px 0 10px 0;
 	width: 100%;

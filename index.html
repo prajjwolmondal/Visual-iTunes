@@ -22,7 +22,7 @@
 			<div class="left-info-sec eight columns">
 				<p class="tagline">Display statistics about your iTunes library in a beautiful way</p>
 				<p>Use this to learn more about your iTunes library beyond what iTunes is normally capable of. It displays statistics and visualizations about your iTunes library using your iTunes library XML file.</p>
-				<p><strong>To use:</strong> In iTunes, go to File->Library->Export to get an iTunes library XML file. Enter it here to visualize your library.</p>
+				
 				<p>No information about your library is stored; all data and calculations are local to your browser.</p>
 				<p>Built at <a href="http://mchacks.io">McHacks 2016</a>. View this on <a href="https://github.com/theposter/libraryStats">Github</a>.</p>
 			</div>
@@ -35,12 +35,30 @@
 
 			<br/><br/>
 
-			<input id="fileupload" name="myfile" type="file" accept="xml" onchange="checkFile();" />
+			<div class="row">
+				<div class="five columns">
+					<label class="library-radio" for="custom-lib">
+						<input type="radio" id="custom-lib" name="library" checked onclick="document.getElementById('fileupload').style.display = 'block';"/> <strong>Use a custom library file from your computer</strong>
+						<br>
 
-			<br/><br/>
+						<p class="descrip"><strong>To find your library file:</strong> In iTunes, go to File->Library->Export to get your iTunes library XML file. Enter it below to visualize your library.</p>
+					</label>
+				</div>
+				<div class="five columns">
+					<label class="library-radio" for="sample-lib">
+						<input type="radio" id="sample-lib" name="library" onclick="document.getElementById('fileupload').style.display = 'none';"/> Use sample library
+						<br>
+						<p class="descrip">A library file provided by us is retrieved from the server.</p>
+					</label>
+				</div>
+			</div>
+
+			<input class="custom-library" id="fileupload" name="myfile" type="file" accept="xml" onchange="checkFile();" />
+
+			<br>
 			
-			<div class="submit">
-				<button id="submit-button" onclick="parse(); move(5);">Submit</button>
+			<div class="custom-library submit">
+				<button id="submit-button" onclick="getFile();">Submit</button>
 				<div class="submit-result"></div>
 			</div>
 
